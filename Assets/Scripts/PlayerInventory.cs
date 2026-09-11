@@ -6,8 +6,9 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private Transform handPoint;
 
     private List<InteractableItem> inventoryList = new List<InteractableItem>();
-
     private InteractableItem currentHeldItem = null;
+
+    private int currentItemIndex = -1; // Índice do item atualmente equipado
 
     private InputSystem_Actions inputActions;
 
@@ -27,6 +28,16 @@ public class PlayerInventory : MonoBehaviour
             DropCurrentItem();
             Debug.Log("Item dropped" + (nomeDoItem != null ? ": " + nomeDoItem : ""));
         }
+
+        float scrollValue = UnityEngine.InputSystem.Mouse.current.scroll.ReadValue().y;
+        if (scrollValue > 0f)
+        {
+            SwitchItem(1);
+        }
+        else if (scrollValue < 0f)
+        {
+            SwitchItem(-1);
+        }
     }
 
     public void PickupItem(InteractableItem item)
@@ -35,6 +46,7 @@ public class PlayerInventory : MonoBehaviour
 
         if (currentHeldItem == null)
         {
+            currentItemIndex = 0;
             EquipItem(item);
         } else
         {
@@ -54,6 +66,42 @@ public class PlayerInventory : MonoBehaviour
     {
         inventoryList.Remove(currentHeldItem);
         currentHeldItem.OnDrop();
-        currentHeldItem = null;
+
+        if (inventoryList.Count > 0)
+        {
+            if (currentItemIndex >= inventoryList.Count)
+            {
+                currentItemIndex = inventoryList.Count - 1; // Volta para o primeiro item se o índice atual estiver fora do alcance
+            }
+            EquipItem(inventoryList[currentItemIndex]);
+        } else
+        {
+            currentHeldItem = null;
+            currentItemIndex = -1; // Nenhum item equipado
+        }
+
+    }
+
+    private void SwitchItem(int direction)
+    {
+        if (inventoryList.Count <= 1) return; // Se houver apenas um item ou nenhum, não faz sentido trocar
+
+
+        if (currentHeldItem != null)
+        {
+            currentHeldItem.gameObject.SetActive(false);
+        }
+
+        currentItemIndex += direction; // Atualiza o índice do item atual com base na direção (1 para próximo, -1 para anterior)
+
+        if (currentItemIndex >= inventoryList.Count) // Se o índice for maior que o tamanho da lista, volta para o primeiro item
+        {
+            currentItemIndex = 0; // Volta para o primeiro item
+        }
+        else if (currentItemIndex < 0)
+        {
+            currentItemIndex = inventoryList.Count - 1; // Vai para o último item
+        }
+        EquipItem(inventoryList[currentItemIndex]); // Equipa o item selecionado
     }
 }
