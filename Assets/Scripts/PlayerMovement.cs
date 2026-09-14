@@ -9,11 +9,13 @@ public class PlayerMovement : MonoBehaviour
     private InputSystem_Actions inputActions;
 
     private float verticalVelocity;
+    private float originalSpeed;
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         inputActions = new InputSystem_Actions();
+        originalSpeed = walkSpeed;
 
     }
 
@@ -39,5 +41,10 @@ public class PlayerMovement : MonoBehaviour
         movement.y = verticalVelocity;
 
         characterController.Move(movement * Time.deltaTime);
+    }
+
+    public void SetHeavyLoad(bool isHeavy)
+    {
+        walkSpeed = isHeavy ? originalSpeed * 0.5f : originalSpeed;
     }
 }

@@ -6,11 +6,14 @@ public class InteractableItem : MonoBehaviour, IInteractable
 {
 
     public string itemName = "Interactable Item";
+    public int itemValor = 0; 
+    public bool isSellable = true; // pode ser vendido?
+    public bool requiresTwoHands = false;
 
     private Rigidbody rb;
     private Collider itemCollider;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         itemCollider = GetComponent<Collider>();
@@ -35,9 +38,17 @@ public class InteractableItem : MonoBehaviour, IInteractable
         rb.AddForce(Camera.main.transform.forward * 3f, ForceMode.Impulse); // aplica uma força para frente ao soltar o item
     }
 
-    public void Interact(GameObject interactor)
+    public virtual void Interact(GameObject interactor)
     {
-        Debug.Log($"{interactor.name} interacted with {gameObject.name}");
+        MetalDetector detector = interactor.GetComponentInChildren<MetalDetector>();
+
+        if (requiresTwoHands && detector != null && detector.isEquipped)
+        {
+            Debug.Log("Item pesado de mais, guarde o detector");
+            return;
+        }
+
+        Debug.Log($"{interactor.name} interacted with {gameObject.name}, valor: {itemValor}");
         PlayerInventory playerInventory = interactor.GetComponent<PlayerInventory>();
 
         if (playerInventory != null)

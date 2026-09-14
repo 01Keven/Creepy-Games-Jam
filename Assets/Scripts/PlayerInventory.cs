@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] private Transform handPoint;
+    [SerializeField] private MetalDetector metalDetector;
+
 
     private List<InteractableItem> inventoryList = new List<InteractableItem>();
     private InteractableItem currentHeldItem = null;
@@ -12,9 +14,12 @@ public class PlayerInventory : MonoBehaviour
 
     private InputSystem_Actions inputActions;
 
+    private PlayerMovement playerMovement;
+
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void OnEnable() => inputActions.Enable();
@@ -57,9 +62,27 @@ public class PlayerInventory : MonoBehaviour
 
     private void EquipItem(InteractableItem item)
     {
+        // if (item.requiresTwoHands && metalDetector != null)
+        // {
+        //     metalDetector.ForceHolster();
+        // }
+        // {
+            
+        // }
+
         currentHeldItem = item;
         item.gameObject.SetActive(true);
         item.OnPickup(handPoint);
+
+        if (item.requiresTwoHands && metalDetector != null) // força o detector a ser guardado se puxar um item do invetario
+        {
+            metalDetector.ForceHolster();
+        }
+
+        if (playerMovement != null)
+        {
+            playerMovement.SetHeavyLoad(item.requiresTwoHands);
+        }
     }
 
     private void DropCurrentItem()
@@ -78,8 +101,19 @@ public class PlayerInventory : MonoBehaviour
         {
             currentHeldItem = null;
             currentItemIndex = -1; // Nenhum item equipado
+
+            // restaura a velocidade se ficar de mão vazia
+            if (playerMovement != null)
+            {
+                playerMovement.SetHeavyLoad(false);
+            }
         }
 
+    }
+
+    public bool isHoldingTwoHandedItem()
+    {
+        return currentHeldItem != null && currentHeldItem.requiresTwoHands;
     }
 
     private void SwitchItem(int direction)

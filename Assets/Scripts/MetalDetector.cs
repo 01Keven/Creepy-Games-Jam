@@ -15,6 +15,7 @@ public class MetalDetector : MonoBehaviour
     {
         inputActions = new InputSystem_Actions();
         detectorMesh = GetComponent<MeshRenderer>();
+
     }
 
     private void OnEnable() => inputActions.Enable();
@@ -34,10 +35,18 @@ public class MetalDetector : MonoBehaviour
         {
             if (inputActions.Player.HolsterDetector.WasPressedThisFrame())
             {
+
+                if (!isEquipped)
+                {
+                    PlayerInventory inventory = GetComponentInParent<PlayerInventory>();
+                    if (inventory != null && inventory.isHoldingTwoHandedItem())
+                    {
+                        Debug.Log("Não pode sacar enquanto segura o detector");
+                        return;
+                    }
+                }
                 isEquipped = !isEquipped;
                 detectorMesh.enabled = isEquipped;
-                Debug.Log("[DEBUG DETECTOR] Botão pressionado. Detector Ligado: " + isOn);
-
                 if (!isEquipped) isOn = false;
             }
 
@@ -45,6 +54,7 @@ public class MetalDetector : MonoBehaviour
             {
                 isOn = !isOn;
                 Debug.Log("[DEBUG DETECTOR] Botão pressionado. Detector Ligado: " + isOn);
+
             }
         }
 
@@ -61,10 +71,21 @@ public class MetalDetector : MonoBehaviour
                     float intensity = 1f - (distance / detectionRadius);
 
                     // LOG DE RASTREAMENTO (Vai flodar o console, bom para testar distâncias)
-                    Debug.Log($"[DEBUG DETECTOR] Rastreado: {buried.gameObject.name} | Distância: {distance:F2} | Intensidade enviada: {intensity:F2}");
+                    // Debug.Log($"[DEBUG DETECTOR] Rastreado: {buried.gameObject.name} | Distância: {distance:F2} | Intensidade enviada: {intensity:F2}");
 
                     buried.UpdateVisualCue(Mathf.Clamp01(intensity));
                 }
             }
         }
+
+        public void ForceHolster()
+    {
+        if (isEquipped)
+        {
+            isEquipped = false;
+            isOn = false;
+            detectorMesh.enabled = false;
+            Debug.Log("Guardado a força item pesado");
+        }
+    }
     }
