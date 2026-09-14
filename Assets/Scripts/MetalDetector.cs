@@ -36,6 +36,7 @@ public class MetalDetector : MonoBehaviour
             {
                 isEquipped = !isEquipped;
                 detectorMesh.enabled = isEquipped;
+                Debug.Log("[DEBUG DETECTOR] Botão pressionado. Detector Ligado: " + isOn);
 
                 if (!isEquipped) isOn = false;
             }
