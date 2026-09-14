@@ -90,7 +90,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false,
@@ -100,6 +100,26 @@
                     "name": "Drop",
                     "type": "Button",
                     "id": "2f51dfea-678a-414a-968d-52c842a54101",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "HolsterDetector",
+                    "type": "Button",
+                    "id": "7693b34e-279f-4911-8bd7-9217d57782ac",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "ToggleDetector",
+                    "type": "Button",
+                    "id": "468ea60b-43eb-4b85-88ac-41db67223919",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold",
@@ -501,6 +521,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47da9315-baae-412c-9ea2-52eb9dcd3891",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HolsterDetector",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7addf7d6-ba7f-4678-933c-c53f2f827905",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleDetector",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
