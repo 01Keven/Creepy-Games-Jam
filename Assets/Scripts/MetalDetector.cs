@@ -31,40 +31,39 @@ public class MetalDetector : MonoBehaviour
     }
 
     private void HandleInputs()
-    {
-        if (inputActions.Player.HolsterDetector.WasPressedThisFrame())
         {
-            isEquipped = !isEquipped;
-            detectorMesh.enabled = isEquipped;
-
-            if (!isEquipped) isOn = false;
-        }
-
-        if (isEquipped && inputActions.Player.ToggleDetector.WasPressedThisFrame())
-        {
-            isOn = !isOn;
-            Debug.Log("Detector Ligador " + isOn);
-        }
-    }
-
-    private void ScanForBuriedItems()
-    {
-        Collider[] hitColliders = Physics.OverlapSphere(detectorTip.position, detectionRadius);
-
-        foreach (var hitCollider in hitColliders)
-        {
-            BuriedItem buried = hitCollider.GetComponent<BuriedItem>();
-            if (buried != null)
+            if (inputActions.Player.HolsterDetector.WasPressedThisFrame())
             {
-                float distance = Vector3.Distance(detectorTip.position, buried.transform.position);
-                float intensity = 1f - (distance / detectionRadius);
+                isEquipped = !isEquipped;
+                detectorMesh.enabled = isEquipped;
 
-                buried.UpdateVisualCue(Mathf.Clamp01(intensity));
+                if (!isEquipped) isOn = false;
+            }
+
+            if (isEquipped && inputActions.Player.ToggleDetector.WasPressedThisFrame())
+            {
+                isOn = !isOn;
+                Debug.Log("[DEBUG DETECTOR] Botão pressionado. Detector Ligado: " + isOn);
             }
         }
-    
+
+        private void ScanForBuriedItems()
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(detectorTip.position, detectionRadius);
+
+            foreach (var hitCollider in hitColliders)
+            {
+                BuriedItem buried = hitCollider.GetComponent<BuriedItem>();
+                if (buried != null)
+                {
+                    float distance = Vector3.Distance(detectorTip.position, buried.transform.position);
+                    float intensity = 1f - (distance / detectionRadius);
+
+                    // LOG DE RASTREAMENTO (Vai flodar o console, bom para testar distâncias)
+                    Debug.Log($"[DEBUG DETECTOR] Rastreado: {buried.gameObject.name} | Distância: {distance:F2} | Intensidade enviada: {intensity:F2}");
+
+                    buried.UpdateVisualCue(Mathf.Clamp01(intensity));
+                }
+            }
+        }
     }
-
-
-
-}
