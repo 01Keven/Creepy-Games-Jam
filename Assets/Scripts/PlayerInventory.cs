@@ -160,4 +160,9 @@ public class PlayerInventory : MonoBehaviour
 
         playerMovement.SetCursedState(hasCurse);
     }
+
+    public InteractableItem GetCurrentHeldItem()
+    {
+        return currentHeldItem;
+    }
 }

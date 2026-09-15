@@ -15,6 +15,14 @@ public class PlayerMovement : MonoBehaviour
     private Camera playerCamera;
     private float originalFov;
 
+    public GameObject uiNote;
+
+    public bool canMove { get; private set; } = true;
+
+    public void FreezePlayer(bool freeze)
+    {
+        canMove = !freeze;
+    }
 
     private void Awake()
     {
@@ -45,10 +53,17 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 inputVector = inputActions.Player.Move.ReadValue<Vector2>();
 
-        if (isCursed)
+        if (canMove)
         {
-            inputVector *= -1f;
+            inputVector = inputActions.Player.Move.ReadValue<Vector2>();
+            if (isCursed)
+            {
+                inputVector *= -1f;
+            }
+
+
         }
+
 
         Vector3 movement = transform.right * inputVector.x + transform.forward * inputVector.y;
         movement *= walkSpeed;

@@ -24,6 +24,16 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (inputActions.Player.Interact.WasPressedThisFrame())
         {
+            // verifica se o item atual é bilhete
+            NoteItem noteInHand = inventory.GetCurrentHeldItem() as NoteItem;
+
+            // se for bilhete, abre a tela e ignora o resto
+            if (noteInHand != null)
+            {
+                noteInHand.ToggleReading();
+                return;
+            }
+            // se não tiver bilhete na mao, interage com o mundo normalmente
             TryInteract();
         }
     }

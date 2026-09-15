@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
@@ -8,9 +9,13 @@ public class PlayerLook : MonoBehaviour
     private float xRotation = 0f;
     private InputSystem_Actions inputActions;
 
+    private PlayerMovement playerMovement;
+
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
+        playerMovement = GetComponentInParent<PlayerMovement>();
+
     }
 
     private void OnEnable()
@@ -30,11 +35,14 @@ public class PlayerLook : MonoBehaviour
 
     void Update()
     {
+        if (playerMovement != null && !playerMovement.canMove) return;
+
         Vector2 mouseInput = UnityEngine.InputSystem.Mouse.current.delta.ReadValue();
 
         float mouseX = mouseInput.x * mouseSensitivity;
         float mouseY = mouseInput.y * mouseSensitivity;
-
+        
+        
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -70f, 70f);
 
