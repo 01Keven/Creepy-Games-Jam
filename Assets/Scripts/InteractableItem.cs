@@ -9,6 +9,7 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public int itemValor = 0; 
     public bool isSellable = true; // pode ser vendido?
     public bool requiresTwoHands = false;
+    public bool isCursedItem = false;
 
     private Rigidbody rb;
     private Collider itemCollider;

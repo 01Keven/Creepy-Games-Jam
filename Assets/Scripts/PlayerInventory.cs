@@ -49,6 +49,8 @@ public class PlayerInventory : MonoBehaviour
     {
         inventoryList.Add(item);
 
+        UpdateCurseState();
+
         if (currentHeldItem == null)
         {
             currentItemIndex = 0;
@@ -89,6 +91,8 @@ public class PlayerInventory : MonoBehaviour
     {
         inventoryList.Remove(currentHeldItem);
         currentHeldItem.OnDrop();
+
+        UpdateCurseState();
 
         if (inventoryList.Count > 0)
         {
@@ -137,5 +141,23 @@ public class PlayerInventory : MonoBehaviour
             currentItemIndex = inventoryList.Count - 1; // Vai para o último item
         }
         EquipItem(inventoryList[currentItemIndex]); // Equipa o item selecionado
+    }
+
+    private void UpdateCurseState()
+    {
+        if (playerMovement == null) return;
+        
+        bool hasCurse = false;
+
+        foreach (var item in inventoryList)
+        {
+            if (item.isCursedItem)
+            {
+                hasCurse = true;
+                break;
+            }
+        }
+
+        playerMovement.SetCursedState(hasCurse);
     }
 }
