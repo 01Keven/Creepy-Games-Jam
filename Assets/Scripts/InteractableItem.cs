@@ -14,6 +14,11 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public bool isPullingItem = false;
     public float pullForce = 3f;
 
+    [Header("Inventario UI")]
+    public Sprite itemIcon;
+    public bool isStackable = false;
+    public int maxStack = 10;
+
     private Rigidbody rb;
     private Collider itemCollider;
 
