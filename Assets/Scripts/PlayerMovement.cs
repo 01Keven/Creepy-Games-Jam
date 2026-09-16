@@ -4,6 +4,10 @@ public class PlayerMovement : MonoBehaviour
 {
     
     [SerializeField] private float walkSpeed = 5f;
+    [Header("Efeito de Puxão")]
+    public Transform pullTarget; // ponto onde puxa o player
+    private bool isBeingPulled = false;
+    private float currentPullForce = 0f;
     
     private CharacterController characterController;
     private InputSystem_Actions inputActions;
@@ -60,13 +64,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 inputVector *= -1f;
             }
-
-
         }
-
 
         Vector3 movement = transform.right * inputVector.x + transform.forward * inputVector.y;
         movement *= walkSpeed;
+
+        if (isBeingPulled && pullTarget != null) // indenpendente do jogador estar andando ou nao
+        {
+            Vector3 pullDirection = (pullTarget.position - transform.position).normalized; // descobre a direção
+            pullDirection.y = 0; // para o jogador nao sair voando ou atravessar o chão
+            movement += pullDirection * currentPullForce; // força do puxao contra ou favor do jogador
+        }
 
         verticalVelocity += Physics.gravity.y * Time.deltaTime;
         movement.y = verticalVelocity;
@@ -100,5 +108,11 @@ public class PlayerMovement : MonoBehaviour
             // quando passsa, o FOV volta suavemente
             playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, originalFov, Time.deltaTime * 5f);
         }
+    }
+
+    public void SetPullState(bool state, float force)
+    {
+        isBeingPulled = state;
+        currentPullForce = force;
     }
 }

@@ -148,17 +148,29 @@ public class PlayerInventory : MonoBehaviour
         if (playerMovement == null) return;
         
         bool hasCurse = false;
+        bool hasPull = false;
+        float maxPullForce = 0f;
 
         foreach (var item in inventoryList)
         {
             if (item.isCursedItem)
             {
                 hasCurse = true;
-                break;
+            }
+
+            if (item.isPullingItem)
+            {
+                hasPull = true;
+
+                if (item.pullForce > maxPullForce)
+                {
+                    maxPullForce = item.pullForce;
+                }
             }
         }
 
         playerMovement.SetCursedState(hasCurse);
+        playerMovement.SetPullState(hasPull, maxPullForce);
     }
 
     public InteractableItem GetCurrentHeldItem()

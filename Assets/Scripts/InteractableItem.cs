@@ -11,6 +11,9 @@ public class InteractableItem : MonoBehaviour, IInteractable
     public bool requiresTwoHands = false;
     public bool isCursedItem = false;
 
+    public bool isPullingItem = false;
+    public float pullForce = 3f;
+
     private Rigidbody rb;
     private Collider itemCollider;
 
