@@ -5,7 +5,9 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private float interactRange = 3f;
     [SerializeField] private PlayerInventory inventory;
 
+
     private InputSystem_Actions inputActions;
+    private PlayerMovement playerMovement;
 
     private void Awake()
     {
@@ -22,20 +24,26 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        if (inputActions.Player.Interact.WasPressedThisFrame())
+        if (inputActions.Player.OpenPaper.WasPressedThisFrame())
         {
             // verifica se o item atual é bilhete
             NoteItem noteInHand = inventory.GetCurrentHeldItem() as NoteItem;
-
-            // se for bilhete, abre a tela e ignora o resto
+                // se for bilhete, abre a tela e ignora o resto
             if (noteInHand != null)
             {
                 noteInHand.ToggleReading();
                 return;
             }
-            // se não tiver bilhete na mao, interage com o mundo normalmente
+        }
+
+        if (playerMovement != null && !playerMovement.canMove) return;
+        
+        if (inputActions.Player.Interact.WasPressedThisFrame())
+        {
             TryInteract();
         }
+                
+        
     }
 
     private void TryInteract()

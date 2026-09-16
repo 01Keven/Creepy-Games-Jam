@@ -211,6 +211,16 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""OpenPaper"",
+                    ""type"": ""Button"",
+                    ""id"": ""eac97921-4d91-421c-9297-89dcd964acee"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -629,6 +639,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleDetector"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86e1258f-4e0f-41b8-9611-94a53c71a12f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenPaper"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1238,6 +1259,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
         m_Player_HolsterDetector = m_Player.FindAction("HolsterDetector", throwIfNotFound: true);
         m_Player_ToggleDetector = m_Player.FindAction("ToggleDetector", throwIfNotFound: true);
+        m_Player_OpenPaper = m_Player.FindAction("OpenPaper", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1343,6 +1365,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Drop;
     private readonly InputAction m_Player_HolsterDetector;
     private readonly InputAction m_Player_ToggleDetector;
+    private readonly InputAction m_Player_OpenPaper;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1402,6 +1425,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ToggleDetector".
         /// </summary>
         public InputAction @ToggleDetector => m_Wrapper.m_Player_ToggleDetector;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OpenPaper".
+        /// </summary>
+        public InputAction @OpenPaper => m_Wrapper.m_Player_OpenPaper;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1464,6 +1491,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleDetector.started += instance.OnToggleDetector;
             @ToggleDetector.performed += instance.OnToggleDetector;
             @ToggleDetector.canceled += instance.OnToggleDetector;
+            @OpenPaper.started += instance.OnOpenPaper;
+            @OpenPaper.performed += instance.OnOpenPaper;
+            @OpenPaper.canceled += instance.OnOpenPaper;
         }
 
         /// <summary>
@@ -1511,6 +1541,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleDetector.started -= instance.OnToggleDetector;
             @ToggleDetector.performed -= instance.OnToggleDetector;
             @ToggleDetector.canceled -= instance.OnToggleDetector;
+            @OpenPaper.started -= instance.OnOpenPaper;
+            @OpenPaper.performed -= instance.OnOpenPaper;
+            @OpenPaper.canceled -= instance.OnOpenPaper;
         }
 
         /// <summary>
@@ -1895,6 +1928,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleDetector(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OpenPaper" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenPaper(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

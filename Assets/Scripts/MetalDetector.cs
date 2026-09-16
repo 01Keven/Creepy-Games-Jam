@@ -78,14 +78,14 @@ public class MetalDetector : MonoBehaviour
             }
         }
 
-        public void ForceHolster()
-    {
-        if (isEquipped)
-        {
-            isEquipped = false;
-            isOn = false;
-            detectorMesh.enabled = false;
-            Debug.Log("Guardado a força item pesado");
-        }
-    }
+    //     public void ForceHolster()
+    // {
+    //     if (isEquipped)
+    //     {
+    //         isEquipped = false;
+    //         isOn = false;
+    //         detectorMesh.enabled = false;
+    //         Debug.Log("Guardado a força item pesado");
+    //     }
+    // }
     }

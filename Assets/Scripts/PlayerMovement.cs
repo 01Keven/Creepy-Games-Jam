@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Vector2 inputVector = inputActions.Player.Move.ReadValue<Vector2>();
+        Vector2 inputVector = Vector2.zero;
 
         if (canMove)
         {

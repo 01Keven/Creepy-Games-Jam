@@ -125,6 +125,16 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "OpenPaper",
+                    "type": "Button",
+                    "id": "eac97921-4d91-421c-9297-89dcd964acee",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -543,6 +553,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleDetector",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86e1258f-4e0f-41b8-9611-94a53c71a12f",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenPaper",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

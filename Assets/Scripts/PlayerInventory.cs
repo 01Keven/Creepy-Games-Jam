@@ -76,10 +76,10 @@ public class PlayerInventory : MonoBehaviour
         item.gameObject.SetActive(true);
         item.OnPickup(handPoint);
 
-        if (item.requiresTwoHands && metalDetector != null) // força o detector a ser guardado se puxar um item do invetario
-        {
-            metalDetector.ForceHolster();
-        }
+        // if (item.requiresTwoHands && metalDetector != null) // força o detector a ser guardado se puxar um item do invetario
+        // {
+        //     metalDetector.ForceHolster();
+        // }
 
         if (playerMovement != null)
         {
