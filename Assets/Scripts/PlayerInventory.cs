@@ -8,6 +8,8 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private MetalDetector metalDetector;
     [SerializeField] private int maxSlots = 3; // Limite máximo do inventário
 
+    public InventoryUI inventoryUI;
+
     [System.Serializable]
     public class InventorySlot
     {
@@ -18,7 +20,7 @@ public class PlayerInventory : MonoBehaviour
         public bool IsFull => !templateItem.isStackable || stackedItems.Count >= templateItem.maxStack;
     }
 
-    private List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
     private InventorySlot currentEquippedSlot = null;
     private int currentSlotIndex = -1;
 
@@ -75,9 +77,10 @@ public class PlayerInventory : MonoBehaviour
                 {
                     slot.stackedItems.Add(newItem);
                     newItem.gameObject.SetActive(false); 
-                    newItem.transform.SetParent(transform); 
+                    newItem.transform.SetParent(transform);
                     Debug.Log($"Agrupado! Agora você tem {slot.stackedItems.Count} {newItem.itemName}s");
                     UpdateCurseState();
+                    UpdateUI();
                     return; 
                 }
             }
@@ -110,6 +113,8 @@ public class PlayerInventory : MonoBehaviour
             newItem.gameObject.SetActive(false);
             newItem.transform.SetParent(transform); 
         }
+
+        UpdateUI();
     }
 
     private void EquipSlot(InventorySlot slot)
@@ -131,18 +136,28 @@ public class PlayerInventory : MonoBehaviour
         {
             playerMovement.SetHeavyLoad(topItem.requiresTwoHands);
         }
+
+        UpdateUI();
     }
 
     private void DropCurrentItem()
     {
         if (currentEquippedSlot == null || currentEquippedSlot.stackedItems.Count == 0) return;
 
-        // Pega o item do topo e remove da pilha
+        // 1. Pega o item do topo da pilha e o remove da lista
         InteractableItem itemToDrop = currentEquippedSlot.stackedItems[currentEquippedSlot.stackedItems.Count - 1];
         currentEquippedSlot.stackedItems.Remove(itemToDrop);
+        
+        // --- A CORREÇÃO ENTRA AQUI ---
+        // Garante que o item fique visível e saia exatamente da mão do jogador
+        itemToDrop.gameObject.SetActive(true);
+        itemToDrop.transform.position = handPoint.position;
+        // -----------------------------
+
+        // 2. Joga o item fisicamente no chão
         itemToDrop.OnDrop();
 
-        // Se o slot ficou vazio após dropar
+        // 3. Verifica se a pilha secou (Slot vazio)
         if (currentEquippedSlot.stackedItems.Count == 0)
         {
             inventorySlots.Remove(currentEquippedSlot);
@@ -161,11 +176,11 @@ public class PlayerInventory : MonoBehaviour
         }
         else
         {
-            // Re-equipa o próximo item da pilha (ex: se soltou a 3ª moeda, equipa a 2ª)
             EquipSlot(currentEquippedSlot);
         }
 
         UpdateCurseState();
+        UpdateUI();
     }
 
     private void SwitchSlot(int direction)
@@ -234,5 +249,13 @@ public class PlayerInventory : MonoBehaviour
 
         playerMovement.SetCursedState(hasCurse);
         playerMovement.SetPullState(hasPull, maxPullForce);
+    }
+
+    private void UpdateUI()
+    {
+        if (inventoryUI != null)
+        {
+            inventoryUI.RefreshUI(inventorySlots, currentSlotIndex);
+        }
     }
 }
