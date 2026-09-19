@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum DialogueAction
+{
+    Nothing,
+    OpenShopp
+}
+
 [CreateAssetMenu(fileName = "New Dialog", menuName = "Sistema de Dialogo/Novo Texto")]
 public class DialogueNode : ScriptableObject
 {
@@ -18,4 +24,5 @@ public class DialogueChoice
 {
     public string choiceText; // O texto do botão (Ex: "Vender moedas")
     public DialogueNode nextNode; // Para qual diálogo essa escolha leva (pode ser nulo para fechar a conversa)
+    public DialogueAction action = DialogueAction.Nothing;
 }

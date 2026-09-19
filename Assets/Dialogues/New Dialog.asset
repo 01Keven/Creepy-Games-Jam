@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: New Dialog
   m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
   npcName: Vendedor
-  dialogueText: 
-  choices: []
+  dialogueText: opa eaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+  choices:
+  - choiceText: sim
+    nextNode: {fileID: 11400000}
+  - choiceText: "n\xE3o"
+    nextNode: {fileID: 11400000}

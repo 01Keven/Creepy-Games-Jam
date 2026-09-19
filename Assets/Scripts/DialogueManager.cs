@@ -80,29 +80,40 @@ public class DialogueManager : MonoBehaviour
         // Se não tiver escolhas, cria um botão padrão de "Avançar/Sair"
         if (node.choices == null || node.choices.Length == 0)
         {
-            CreateButton("Avançar", null);
+            CreateButton("Next", null, DialogueAction.Nothing);
             return;
         }
 
         // Cria os botões baseados nas opções do ScriptableObject
         foreach (DialogueChoice choice in node.choices)
         {
-            CreateButton(choice.choiceText, choice.nextNode);
+            CreateButton(choice.choiceText, choice.nextNode, choice.action);
         }
     }
 
-    private void CreateButton(string text, DialogueNode nextNode)
+    private void CreateButton(string text, DialogueNode nextNode, DialogueAction action)
     {
         GameObject buttonObj = Instantiate(choiceButtonPrefab, choicesContainer.transform);
         buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = text;
         
         Button btn = buttonObj.GetComponent<Button>();
-        btn.onClick.AddListener(() => OnChoiceClicked(nextNode));
+        btn.onClick.AddListener(() => OnChoiceClicked(nextNode, action));
     }
 
-    private void OnChoiceClicked(DialogueNode nextNode)
+    private void OnChoiceClicked(DialogueNode nextNode, DialogueAction action)
     {
         if (isTyping) return; // Impede clicar antes do texto terminar
+
+        if (action == DialogueAction.OpenShopp)
+        {
+            EndDialogue();
+
+            PlayerInventory inventory = currentPlayer.GetComponent<PlayerInventory>();
+            ShopManager.Instance.OpenShop(inventory);
+
+            return;
+        }
+
 
         if (nextNode != null)
         {

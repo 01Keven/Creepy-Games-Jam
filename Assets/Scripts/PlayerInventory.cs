@@ -8,6 +8,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private MetalDetector metalDetector;
     [SerializeField] private int maxSlots = 3; // Limite máximo do inventário
 
+    public int currentMoney = 0;
     public InventoryUI inventoryUI;
 
     [System.Serializable]
@@ -256,6 +257,58 @@ public class PlayerInventory : MonoBehaviour
         if (inventoryUI != null)
         {
             inventoryUI.RefreshUI(inventorySlots, currentSlotIndex);
+        }
+    }
+
+    public void SellItem(InteractableItem itemToSell)
+    {
+        if (!itemToSell.isSellable) return; // Trava de segurança
+
+        foreach (var slot in inventorySlots)
+        {
+            if (slot.stackedItems.Contains(itemToSell))
+            {
+                // Remove o item da lista
+                slot.stackedItems.Remove(itemToSell);
+                
+                // Adiciona o valor do item na carteira
+                currentMoney += itemToSell.itemValor;
+                Debug.Log($"Vendido: {itemToSell.itemName} por {itemToSell.itemValor}. Saldo: {currentMoney}");
+
+                // Se o slot ficou vazio, remove o slot inteiro
+                if (slot.stackedItems.Count == 0)
+                {
+                    inventorySlots.Remove(slot);
+                    
+                    // Ajusta o que está na mão do player
+                    if (currentEquippedSlot == slot)
+                    {
+                        if (inventorySlots.Count > 0)
+                        {
+                            currentSlotIndex = Mathf.Clamp(currentSlotIndex - 1, 0, inventorySlots.Count - 1);
+                            EquipSlot(inventorySlots[currentSlotIndex]);
+                        }
+                        else
+                        {
+                            currentEquippedSlot = null;
+                            currentSlotIndex = -1;
+                            if (playerMovement != null) playerMovement.SetHeavyLoad(false);
+                        }
+                    }
+                }
+                else if (currentEquippedSlot == slot)
+                {
+                    // Re-equipa para atualizar a mão
+                    EquipSlot(slot);
+                }
+
+                // Destrói o objeto 3D do item, já que foi vendido
+                Destroy(itemToSell.gameObject);
+
+                UpdateCurseState();
+                UpdateUI();
+                return;
+            }
         }
     }
 }
